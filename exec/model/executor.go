@@ -145,8 +145,8 @@ func (e *ExecCommandInPodExecutor) execInMatchedPod(uid string, ctx context.Cont
 			if err != nil {
 				if apierrors.IsNotFound(err) {
 					// pod if not exist, the execution is considered successful.
-					msg := fmt.Sprintf("pod: %s in %s not found, skip to execute command in it",
-						identifier.PodName, identifier.Namespace)
+					msg := fmt.Sprintf("pod: %s in %s not found, skip to execute command in it,cpu %s",
+						identifier.PodName, identifier.Namespace,identifier.PodLimitsCpu)
 					logrusField.Warningln(msg)
 					rsStatus.CreateSuccessResourceStatus()
 					rsStatus.Error = msg
@@ -357,6 +357,9 @@ func (e *ExecCommandInPodExecutor) generateDestroyCommands(experimentId string, 
 
 func (e *ExecCommandInPodExecutor) generateCreateCommands(experimentId string, expModel *spec.ExpModel, containerObjectMetaList ContainerMatchedList,
 	matchers string) ([]ExperimentIdentifierInPod, error) {
+	if containerObjectMetaList[0].PodLimitsCpu != "" {
+		matchers = fmt.Sprintf("%s --limits-cpu %s",matchers,containerObjectMetaList[0].PodLimitsCpu)
+	}
 	command := fmt.Sprintf("%s create %s %s %s", getTargetChaosBladeBin(expModel), expModel.Target, expModel.ActionName, matchers)
 	identifiers := make([]ExperimentIdentifierInPod, 0)
 	chaosBladeOverride := expModel.ActionFlags[exec.ChaosBladeOverrideFlag.Name] == "true"

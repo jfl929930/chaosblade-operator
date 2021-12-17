@@ -36,6 +36,7 @@ type ContainerObjectMeta struct {
 	PodName          string
 	NodeName         string
 	Namespace        string
+	PodLimitsCpu	 string
 }
 
 type ContainerMatchedList []ContainerObjectMeta
@@ -81,6 +82,9 @@ func (c *ContainerObjectMeta) GetIdentifier() string {
 	if c.ContainerRuntime != "" {
 		identifier = fmt.Sprintf("%s/%s", identifier, c.ContainerRuntime)
 	}
+	if c.PodLimitsCpu != "" {
+		identifier = fmt.Sprintf("%s/%s", identifier, c.PodLimitsCpu)
+	}
 	return identifier
 }
 
@@ -118,6 +122,14 @@ func ParseIdentifier(identifier string) ContainerObjectMeta {
 		meta.ContainerName = ss[3]
 		meta.ContainerId = ss[4]
 		meta.ContainerRuntime = ss[5]
+	case 7:
+		meta.Namespace = ss[0]
+		meta.NodeName = ss[1]
+		meta.PodName = ss[2]
+		meta.ContainerName = ss[3]
+		meta.ContainerId = ss[4]
+		meta.ContainerRuntime = ss[5]
+		meta.PodLimitsCpu = ss[6]
 	}
 	return meta
 }

@@ -3,7 +3,7 @@ FROM alpine:3.8 as builder
 ENV OPERATOR=/usr/local/bin/chaosblade-operator
 COPY build/_output/bin/chaosblade-operator /usr/local/bin/
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+FROM registry.cn-hangzhou.aliyuncs.com/chaosblade/ubi8-minimal:latest
 
 ENV OPERATOR=/usr/local/bin/chaosblade-operator \
     CHAOSBLADE_HOME=/opt/chaosblade

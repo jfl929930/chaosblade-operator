@@ -130,6 +130,8 @@ func getMatchedContainerMetaList(pods []v1.Pod, containerIdsValue, containerName
 	expectedContainerNames := strings.Split(containerNamesValue, ",")
 	// priority id>name>index
 	for _, pod := range pods {
+		logrus.Infof("cpu:%v",pod.Spec.Containers[0].Resources.Limits.Cpu())
+		logrus.Infof("containersLen:%v",len(pod.Spec.Containers))
 		containerStatuses := pod.Status.ContainerStatuses
 		if containerStatuses == nil {
 			continue
@@ -153,6 +155,7 @@ func getMatchedContainerMetaList(pods []v1.Pod, containerIdsValue, containerName
 							PodName:          pod.Name,
 							Namespace:        pod.Namespace,
 							NodeName:         pod.Spec.NodeName,
+							PodLimitsCpu:     pod.Spec.Containers[0].Resources.Limits.Cpu().String(),
 						})
 					}
 				}
@@ -170,6 +173,7 @@ func getMatchedContainerMetaList(pods []v1.Pod, containerIdsValue, containerName
 							PodName:          pod.Name,
 							Namespace:        pod.Namespace,
 							NodeName:         pod.Spec.NodeName,
+							PodLimitsCpu:     pod.Spec.Containers[0].Resources.Limits.Cpu().String(),
 						})
 					}
 				}
@@ -196,6 +200,7 @@ func getMatchedContainerMetaList(pods []v1.Pod, containerIdsValue, containerName
 				PodName:          pod.Name,
 				Namespace:        pod.Namespace,
 				NodeName:         pod.Spec.NodeName,
+				PodLimitsCpu:     pod.Spec.Containers[0].Resources.Limits.Cpu().String(),
 			})
 		}
 	}

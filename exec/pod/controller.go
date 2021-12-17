@@ -103,6 +103,7 @@ func getContainerMatchedList(experimentId string, pods []v1.Pod) model.Container
 			PodName:       p.Name,
 			NodeName:      p.Spec.NodeName,
 			Namespace:     p.Namespace,
+			PodLimitsCpu:  p.Spec.Containers[0].Resources.Limits.Cpu().String(),
 		})
 	}
 	return containerObjectMetaList
